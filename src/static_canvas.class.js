@@ -934,15 +934,15 @@
         fabric.util.clipContext(this, ctx);
       }
       this._renderBackground(ctx);
+      if (!this.controlsAboveOverlay && this.interactive) {
+        this.drawControls(ctx);
+      }
 
       ctx.save();
       //apply viewport transform once for all rendering process
       ctx.transform(v[0], v[1], v[2], v[3], v[4], v[5]);
       this._renderObjects(ctx, objects);
       ctx.restore();
-      if (!this.controlsAboveOverlay && this.interactive) {
-        this.drawControls(ctx);
-      }
       if (this.clipTo) {
         ctx.restore();
       }

@@ -11,10 +11,12 @@ else if (typeof define === 'function' && define.amd) {
 }
 /* _AMD_END_ */
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
-  if (document instanceof HTMLDocument)
+  if (document instanceof HTMLDocument) {
     fabric.document = document;
-  else
-    fabric.document = document.implementation.createHTMLDocument("");
+  }
+  else {
+    fabric.document = document.implementation.createHTMLDocument('');
+  }
   fabric.window = window;
 }
 else {
@@ -7488,15 +7490,15 @@ fabric.ElementsParser = function(elements, callback, options, reviver, parsingOp
         fabric.util.clipContext(this, ctx);
       }
       this._renderBackground(ctx);
+      if (!this.controlsAboveOverlay && this.interactive) {
+        this.drawControls(ctx);
+      }
 
       ctx.save();
       //apply viewport transform once for all rendering process
       ctx.transform(v[0], v[1], v[2], v[3], v[4], v[5]);
       this._renderObjects(ctx, objects);
       ctx.restore();
-      if (!this.controlsAboveOverlay && this.interactive) {
-        this.drawControls(ctx);
-      }
       if (this.clipTo) {
         ctx.restore();
       }
