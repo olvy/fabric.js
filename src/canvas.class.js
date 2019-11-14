@@ -1152,6 +1152,25 @@
     },
 
     /**
+     * Get extra targets inside group
+     * @param {Array[fabric.Object]}
+     * @return {Array[fabric.Object]}
+     */
+    _getExtraTargets: function (objects) {
+      return (objects || []).map(function(object, index) {
+        var target = (object._objects || []).find(function(o) {
+          return o.targetable
+        })
+        if (target) {
+          target.parentIndex = index
+        }
+        return target
+      }).filter(function(o) {
+        return !!o
+      });
+    },
+
+    /**
      * Method that determines what object we are clicking on
      * the skipGroup parameter is for internal use, is needed for shift+click action
      * 11/09/2018 TODO: would be cool if findTarget could discern between being a full target
@@ -1199,7 +1218,13 @@
         target = activeTarget;
         this.targets = activeTargetSubs;
       }
-      return target;
+      if (target) {
+        return target
+      } else {
+        var extraTargets = this._getExtraTargets(this._objects);
+        var extraTarget = this._searchPossibleTargets(extraTargets, pointer);
+        return extraTarget ? this._objects[extraTarget.parentIndex] : undefined
+      }
     },
 
     /**
